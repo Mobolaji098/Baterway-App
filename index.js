@@ -40,12 +40,12 @@ connection.on('error', (err) => {
 
 //=== 3 - INITIALIZE PASSPORT MIDDLEWARE
 app.use(passport.initialize());
-require("./middlewares/jwt")(passport);
+require("./src/middlewares/jwt")(passport);
 
 
 //=== 4 - CONFIGURE ROUTES
 //Configure Route
-require('./routes/index')(app);
+require('./src/routes/index')(app);
 
 
 //=== 5 - START SERVER
