@@ -12,7 +12,7 @@ const upload = multer().single('profileImage');
 //INDEX
 router.get('/', User.index);
 
-//STORE
+//STORES
 router.post('/', [
     check('email').isEmail().withMessage('Enter a valid email address'), 
     check('userName').not().isEmpty().withMessage('Your username is required'),
