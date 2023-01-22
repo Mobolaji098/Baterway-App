@@ -21,6 +21,9 @@ const UserSchema = new mongoose.Schema({
     gender: {
         type: String,
     },
+    location:{
+
+    },
 
     phoneNumber: {
         type: Number,
@@ -28,10 +31,10 @@ const UserSchema = new mongoose.Schema({
         required: 'phoneNumber is required',
        
     },
-    age: {
-        type: Number,
-        min: [16, 'Too young'],
-        required: 'age is required',
+    DOB: {
+        type: Date,
+        max: [Date.now() - 365*18*24*60*60*1000, 'Too young to register'],//16 years
+        required: 'date of birth is required',
        
     },
 
