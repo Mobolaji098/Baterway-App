@@ -30,6 +30,7 @@ const UserSchema = new mongoose.Schema({
     },
     age: {
         type: Number,
+        min: [16, 'Too young'],
         required: 'age is required',
        
     },

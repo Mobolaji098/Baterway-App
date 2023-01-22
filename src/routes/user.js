@@ -13,11 +13,11 @@ const upload = multer().single('profileImage');
 router.get('/', User.index);
 
 //STORES
-router.post('/', [
-    check('email').isEmail().withMessage('Enter a valid email address'), 
-    check('userName').not().isEmpty().withMessage('Your username is required'),
-    check('phoneNumber').not().isEmpty().withMessage('Your phone number required'),
-], validate, User.store);
+// router.post('/', [
+//     check('email').isEmail().withMessage('Enter a valid email address'), 
+//     check('userName').not().isEmpty().withMessage('Your username is required'),
+//     check('phoneNumber').not().isEmpty().withMessage('Your phone number required'),
+// ], validate, User.store);
 
 //SHOW
 router.get('/:id',  User.show);

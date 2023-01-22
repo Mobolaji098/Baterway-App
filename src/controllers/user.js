@@ -1,4 +1,6 @@
 const User = require('../models/user');
+const Token = require('../models/token')
+const Product = require('../models/product')
 const {uploader, sendEmail} = require('../utils/index');
 
 // @route GET admin/user
@@ -12,48 +14,48 @@ exports.index = async function (req, res) {
 // @route POST api/user
 // @desc Add a new user
 // @access Public
-exports.store = async (req, res) => {
-    try {
-        const {email,phoneNumber,userName } = req.body;
+// exports.store = async (req, res) => {
+//     try {
+//         const {email,phoneNumber,userName } = req.body;
 
-        // Make sure this account doesn't already exist
-        const user = await User.findOne({email});
-        const userP = await User.findOne({ phoneNumber });
-        const userN = await User.findOne({ userName });
+//         // Make sure this account doesn't already exist
+//         const user = await User.findOne({email});
+//         const userP = await User.findOne({ phoneNumber });
+//         const userN = await User.findOne({ userName });
 
-        if (user) return res.status(401).json({message: 'The email address you have entered is already associated with another account. You can change this users role instead.'});
-        if (userP) return res.status(401).json({message: 'The phone number you have entered is already associated with another account.'});
-        if (userN) return res.status(401).json({message: 'The username you have entered is already associated with another account.'});
+//         if (user) return res.status(401).json({message: 'The email address you have entered is already associated with another account. You can change this users role instead.'});
+//         if (userP) return res.status(401).json({message: 'The phone number you have entered is already associated with another account.'});
+//         if (userN) return res.status(401).json({message: 'The username you have entered is already associated with another account.'});
 
-        const password = '_' + Math.random().toString(36).substr(2, 9); //generate a random password
-        const newUser = new User({...req.body, password});
+//         const password = '_' + Math.random().toString(36).substr(2, 9); //generate a random password
+//         const newUser = new User({...req.body, password});
 
-        const user_ = await newUser.save();
+//         const user_ = await newUser.save();
 
-        //Generate and set password reset token
-        user_.generatePasswordReset();
+//         //Generate and set password reset token
+//         user_.generatePasswordReset();
 
-        // Save the updated user object
-        await user_.save();
+//         // Save the updated user object
+//         await user_.save();
 
-        //Get mail options
-        let domain = "http://" + req.headers.host;
-        let subject = "New Account Created";
-        let to = user.email;
-        let from = process.env.FROM_EMAIL;
-        let link = "http://" + req.headers.host + "/api/auth/reset/" + user.resetPasswordToken;
-        let html = `<p>Hi ${user.userName}<p><br><p>A new account has been created for you on ${domain}. Please click on the following <a href="${link}">link</a> to set your password and login.</p> 
-                  <br><p>If you did not request this, please ignore this email.</p>`
+//         //Get mail options
+//         let domain = "http://" + req.headers.host;
+//         let subject = "New Account Created";
+//         let to = user.email;
+//         let from = process.env.FROM_EMAIL;
+//         let link = "http://" + req.headers.host + "/api/auth/reset/" + user.resetPasswordToken;
+//         let html = `<p>Hi ${user.userName}<p><br><p>A new account has been created for you on ${domain}. Please click on the following <a href="${link}">link</a> to set your password and login.</p> 
+//                   <br><p>If you did not request this, please ignore this email.</p>`
 
-        await sendEmail({to, from, subject, html});
-        console.log(link)
+//         await sendEmail({to, from, subject, html});
+//         console.log(link)
 
-        res.status(200).json({message: 'An email has been sent to ' + user.email + '.'});
+//         res.status(200).json({message: 'An email has been sent to ' + user.email + '.'});
 
-    } catch (error) {
-        res.status(500).json({success: false, message: error.message})
-    }
-};
+//     } catch (error) {
+//         res.status(500).json({success: false, message: error.message})
+//     }
+// };
 
 // @route GET api/user/{id}
 // @desc Returns a specific user
@@ -63,7 +65,6 @@ exports.show = async function (req, res) {
         const id = req.params.id;
 
         const user = await User.findById(id);
-        console.log({"req":req,})
 
         if (!user) return res.status(401).json({message: 'User does not exist'});
 
@@ -113,6 +114,8 @@ exports.destroy = async function (req, res) {
         if (user_id.toString() !== id.toString()) return res.status(401).json({message: "Sorry, you don't have the permission to delete this data."});
 
         await User.findByIdAndDelete(id);
+        await Product.deleteMany({ userId: id});
+        await Token.deleteOne({  userId: id });
         res.status(200).json({message: 'User has been deleted'});
     } catch (error) {
         res.status(500).json({message: error.message});
