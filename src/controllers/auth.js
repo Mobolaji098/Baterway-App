@@ -141,7 +141,7 @@ async function sendVerificationEmail(user, req, res){
                   <br><p>If you did not request this, please ignore this email.</p>`;
 
         await sendEmail({to, from, subject, html});
-        console.log(link)
+       
         res.status(200).json({message: 'A verification email has been sent to ' + user.email + '.'});
     }catch (error) {
         res.status(500).json({message: error.message})

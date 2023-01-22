@@ -17,19 +17,19 @@ exports.recover = async (req, res) => {
 
         // Save the updated user object
         await user.save();
+       
 
         // send email
         let subject = "Password change request";
         let to = user.email;
-        let from = Process.env.FROM_EMAIL;
+        let from = process.env.FROM_EMAIL;
         let link = "http://" + req.headers.host + "/api/auth/reset/" + user.resetPasswordToken;
         let html = `<p>Hi ${user.userName}</p>
                     <p>Please click on the following <a href="${link}">link</a> to reset your password.</p> 
                     <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>`;
-
+        
         await sendEmail({to, from, subject, html});
         
-
 
         res.status(200).json({message: 'A reset email has been sent to ' + user.email + '.'});
     } catch (error) {
