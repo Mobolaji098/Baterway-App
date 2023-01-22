@@ -65,7 +65,7 @@ exports.login = async (req, res) => {
 
         // Make sure the user has been verified
         if (!user.isVerified) return res.status(401).json({ type: 'not-verified', message: 'Your account has not been verified.' });
-
+        
         // Login successful, write token, and send back user
         res.status(200).json({token: user.generateJWT(), user: user});
     } catch (error) {
@@ -135,8 +135,9 @@ async function sendVerificationEmail(user, req, res){
         let subject = "Account Verification Token";
         let to = user.email;
         let from = process.env.FROM_EMAIL;// env
-        let link="http://"+req.headers.host+"/api/auth/verify/"+token.token;
-        let html = `<p>Hi ${user.userName}<p><br><p>Please click on the following <a href="${link}">link</a> to verify your account.</p> 
+        // "http://"+req.headers.host+"/api/auth/verify/"
+        let link=token.token;
+        let html = `<p>Hi ${user.userName}<p><br><p>Please use this OTP <h2>${link}</h2> to verify your account.</p> 
                   <br><p>If you did not request this, please ignore this email.</p>`;
 
         await sendEmail({to, from, subject, html});
@@ -146,3 +147,4 @@ async function sendVerificationEmail(user, req, res){
         res.status(500).json({message: error.message})
     }
 }
+

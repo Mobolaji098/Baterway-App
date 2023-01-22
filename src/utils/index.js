@@ -2,9 +2,8 @@ const Datauri = require('datauri');
 const path = require('path');
 
 const cloudinary = require('../config/cloudinary');
-const sgMail = require('@sendgrid/mail');
+var nodemailer = require('nodemailer');
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 function uploader(req) {
     return new Promise((resolve, reject) => {
@@ -19,14 +18,22 @@ function uploader(req) {
 }
 
 function sendEmail(mailOptions) {
-    sgMail.send(mailOptions)
-  .then(() => {
-    console.log(mailOptions)
-    console.log('Email sent')
-  })
-  .catch((error) => {
-    console.error(error)
-  })
+  
+  var transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'badabolaji@gmail.com',
+      pass: 'winiagbfwrdoedev'
+    }
+  });
+
+  transporter.sendMail(mailOptions, function(error, info){
+    if (error) {
+      console.log(error);
+    } else {
+      console.log('Email sent: ' + info.response);
+    }
+  });
    
     // return new Promise((resolve, reject) => {
     //     sgMail.send(mailOptions, (error, result) => {

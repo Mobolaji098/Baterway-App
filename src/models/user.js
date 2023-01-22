@@ -18,11 +18,19 @@ const UserSchema = new mongoose.Schema({
         unique: true,
         required: 'Your username is required',
     },
+    gender: {
+        type: String,
+    },
 
     phoneNumber: {
         type: Number,
         unique: true,
         required: 'phoneNumber is required',
+       
+    },
+    age: {
+        type: Number,
+        required: 'age is required',
        
     },
 
@@ -50,7 +58,10 @@ const UserSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    
+    KYC: {
+        type: Boolean,
+        default: false
+    },
     resetPasswordToken: {
         type: String,
         required: false

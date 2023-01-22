@@ -63,7 +63,7 @@ exports.show = async function (req, res) {
         const id = req.params.id;
 
         const user = await User.findById(id);
-        // console.log(req)
+        console.log({"req":req,})
 
         if (!user) return res.status(401).json({message: 'User does not exist'});
 
