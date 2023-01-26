@@ -9,12 +9,11 @@ const {sendEmail} = require('../utils/index');
 exports.register = async (req, res) => {
     try {
     //    console.log(process.env.CLOUD_NAME)
-        const { email,password,confirmPassword,phoneNumber,userName } = req.body;
+        const { email,password,confirmPassword,userName } = req.body;
         
        
         // Make sure this account email,username and phone Number doesn't already exist
         const user = await User.findOne({ email });
-        const userP = await User.findOne({ phoneNumber });
         const userN = await User.findOne({ userName });
 
         // Make sure password and confirm password are the same
@@ -35,7 +34,6 @@ exports.register = async (req, res) => {
         // registerError()
     //    
         if (user) return res.status(401).json({message: 'The email address you have entered is already associated with another account.'});
-        if (userP) return res.status(401).json({message: 'The phone number you have entered is already associated with another account.'});
         if (userN) return res.status(401).json({message: 'The username you have entered is already associated with another account.'});
 
         const newUser = new User({ ...req.body, role: "basic" });

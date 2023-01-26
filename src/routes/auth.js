@@ -15,7 +15,6 @@ router.post('/register', [
     check('email').isEmail().withMessage('Enter a valid email address'),
     check('password').not().isEmpty().isLength({min: 8}).withMessage('Must be at least 8 chars long'),
     check('userName').not().isEmpty().withMessage('Your username is required'),
-    check('phoneNumber').not().isEmpty().withMessage('Your phone number required'),
     check('confirmPassword').not().isEmpty().withMessage('Your confirmPassword is required'),
 ], validate, Auth.register);
 

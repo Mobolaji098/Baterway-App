@@ -21,16 +21,7 @@ const UserSchema = new mongoose.Schema({
     gender: {
         type: String,
     },
-    location:{
 
-    },
-
-    phoneNumber: {
-        type: Number,
-        unique: true,
-        required: 'phoneNumber is required',
-       
-    },
     DOB: {
         type: Date,
         max: [Date.now() - 365*18*24*60*60*1000, 'Too young to register'],//16 years
@@ -46,7 +37,12 @@ const UserSchema = new mongoose.Schema({
     },
    
 
-    bio: {
+    location: {
+        type: String,
+        required: false,
+        max: 255
+    },
+    language: {
         type: String,
         required: false,
         max: 255
@@ -132,7 +128,7 @@ UserSchema.methods.generateVerificationToken = function() {
     let payload = {
         userId: this._id,
         // token: crypto.randomBytes(20).toString('hex')
-        token: Math.floor(Math.random()*90000) + 10000
+        token: Math.floor(Math.random()*900000) + 100000
     
     };
 

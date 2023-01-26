@@ -22,8 +22,8 @@ function sendEmail(mailOptions) {
   var transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'badabolaji@gmail.com',
-      pass: 'winiagbfwrdoedev'
+      user: 'barterwayapp@gmail.com',
+      pass: 'ownsvdmjwahixmpq'
     }
   });
 
